@@ -4,10 +4,9 @@ services:
     container_name: config-service
     ports:
       - "5555:5555"
-    volumes:
-      - ./cloud-conf:/app/config
     environment:
-      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=file:///app/config
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/SihemOHsin/microservices-project.git
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS=cloud-conf
     networks:
       - microservices-net
 
