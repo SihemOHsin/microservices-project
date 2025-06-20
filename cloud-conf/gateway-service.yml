@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      routes:
+        - id: r1
+          uri: http://client-service:8081/
+          predicates:
+            - Path=/clients/**
+        - id: r2
+          uri: http://produit-service:8082/
+          predicates:
+            - Path=/produits/**
