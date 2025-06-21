@@ -1,0 +1,104 @@
+services:
+  config-service:
+    build: ./config-service
+    container_name: config-service
+    ports:
+      - "5555:5555"
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/SihemOHsin/microservices-project.git
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH_PATHS=cloud-conf
+    networks:
+      - microservices-net
+
+  eureka-service:
+    build: ./eureka-discoveryservice
+    container_name: eureka-service
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-service
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:5555
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - microservices-net
+
+  gateway-service:
+    build: ./gatewayservice
+    container_name: gateway-service
+    ports:
+      - "8888:8888"
+    depends_on:
+      - config-service
+      - eureka-service
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:5555
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - microservices-net
+
+  client-service:
+    build: ./client-service
+    container_name: client-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - config-service
+      - eureka-service
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:5555
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - microservices-net
+
+  produit-service:
+    build: ./produitservice
+    container_name: produit-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - config-service
+      - eureka-service
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:5555
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - microservices-net
+
+  facture-service:
+    build: ./factureservice
+    container_name: facture-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - config-service
+      - eureka-service
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:5555
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - microservices-net
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8090:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - microservices-net
+    depends_on:
+      - config-service
+      - eureka-service
+
+    privileged: true  
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  jenkins_home
