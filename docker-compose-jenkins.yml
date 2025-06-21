@@ -2,6 +2,7 @@ services:
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins
+    privileged: true              
     ports:
       - "8090:8080"
       - "50000:50000"
@@ -10,6 +11,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - microservices-net
+
 networks:
   microservices-net:
 
