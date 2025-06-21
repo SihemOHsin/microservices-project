@@ -1,11 +1,6 @@
 server:
   port: 8888
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka-service:8761/eureka/
-
 spring:
   application:
     name: gateway-service
@@ -22,3 +17,8 @@ spring:
           uri: http://produit-service:8082/
           predicates:
             - Path=/produits/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
