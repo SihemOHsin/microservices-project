@@ -9,10 +9,6 @@ services:
       - jenkins_home:/var/jenkins_home
     networks:
       - microservices-net
-    depends_on:
-      - config-service
-      - eureka-service
-
 networks:
   microservices-net:
 
